@@ -62,9 +62,9 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     assert(root_p);
     assert(out_file_p);
 
-    // ON_DEBUG(
-    fprintf(out_file_p,
+    ON_DEBUG(
 
+    fprintf(out_file_p,
     "    \"%p\" [label= \"{\n"
     "               <parent> parent = \\\"%p\\\" |\n"
     "               node type = ",
@@ -79,21 +79,25 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     printValueOfNode(out_file_p, root_p->full_value);
 
     fprintf(out_file_p,
-
-
     "|\n               { <left> left = \\\"%p\\\"| pointer = \\\"%p\\\" | <right> right = \\\"%p\\\"}\n"
     "           }\"]\n\n",
-
     root_p->left_p, root_p, root_p->right_p);
-    // )
 
-//     OFF_DEBUG(
-//     fprintf(out_file_p,
-//
-//     "    \"%p\" [label = \" value = %s\"]\n\n",
-//
-//     root_p, root_p->value);
-//     )
+    )
+
+    OFF_DEBUG(
+
+    fprintf(out_file_p,
+    "    \"%p\" [label = \"",
+    root_p);
+
+    printValueOfNode(out_file_p, root_p->full_value);
+
+    fprintf(out_file_p,
+    "\n\"]\n\n"
+    );
+
+    )
 
     if(root_p->left_p == NULL && root_p->right_p == NULL){
 
@@ -104,7 +108,7 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
 
         addTreeToVisualization(root_p->right_p, out_file_p);
         ON_DEBUG( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n", root_p, root_p->right_p);)
-        //OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->right_p);)
+        OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->right_p);)
         return;
     }
 
@@ -112,7 +116,7 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
 
         addTreeToVisualization(root_p->left_p, out_file_p);
         ON_DEBUG( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n", root_p, root_p->left_p);)
-        //OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->left_p);)
+        OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->left_p);)
         return;
     }
 
@@ -120,9 +124,9 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     addTreeToVisualization(root_p->right_p, out_file_p);
 
     ON_DEBUG( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n" , root_p, root_p->left_p );)
-    //OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"[label = \"YES\", fontcolor = \"white\"]\n"      , root_p, root_p->left_p );)
+    OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"      , root_p, root_p->left_p );)
     ON_DEBUG( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n" , root_p, root_p->right_p);)
-    //OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"[label = \"NO\", fontcolor = \"white\"]\n"       , root_p, root_p->right_p);)
+    OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"       , root_p, root_p->right_p);)
 
     fprintf(out_file_p, "   {rank=same; \"%p\"; \"%p\"}\n", root_p->left_p, root_p->left_p);
 }

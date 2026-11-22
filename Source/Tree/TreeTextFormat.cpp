@@ -27,7 +27,6 @@ void printSubtreeInFile(const node_t* const root_p, FILE* const out_file_p){
 
     if(root_p == NULL){
 
-        fprintf(out_file_p, "(nil)");
         return;
 
     }else{

@@ -18,10 +18,12 @@ enum return_codes{
 #ifdef DEBUG
 
     #define ON_DEBUG(...) __VA_ARGS__
+    #define OFF_DEBUG(...)
 
 #else
 
     #define ON_DEBUG(...)
+    #define OFF_DEBUG(...) __VA_ARGS__
 
 #endif
 

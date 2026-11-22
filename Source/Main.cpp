@@ -16,5 +16,5 @@ int main(){
 
     visualizeTree(root_p, "Tree1.svg");
 
-    //printTreeInFile(root_p, "Tree1.txt");
+    printTreeInFile(root_p, "Tree1.txt");
 }
