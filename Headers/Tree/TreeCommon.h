@@ -17,7 +17,10 @@ enum branch_codes{
 enum operation_codes{
 
     ADD,
-    SUB
+    SUB,
+    MUL,
+    DIV,
+    SIN
 };
 
 enum var_codes{

@@ -88,7 +88,7 @@ return_codes startProcessingFile(node_t** const root_p_p, const char* const tree
 
     node_full_value_t full_value = {};
 
-    if(parseNodeValue(tree_text, &symbol_idx, &full_value) == RET_ERROR){ // При этом не скипаем до (
+    if(parseNodeValue(tree_text, &symbol_idx, &full_value) == RET_ERROR){ // При этом скипаем до (
 
         return RET_ERROR;
     }
@@ -99,6 +99,10 @@ return_codes startProcessingFile(node_t** const root_p_p, const char* const tree
         return RET_ERROR;
     }
 
+    printf("Done root with value: <");
+    printValueOfNode(stdout, full_value);
+    printf(">\n");
+
     return createSubtreeFromFile(*root_p_p, tree_text, &symbol_idx);
 }
 
@@ -108,12 +112,12 @@ return_codes createSubtreeFromFile(node_t* const parent_p, const char* const tre
     assert(symbol_idx_p);
     assert(tree_text);
 
-    if(processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_LEFT ) == RET_ERROR){
+    if(tree_text[*symbol_idx_p] == '(' && processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_LEFT ) == RET_ERROR){
 
         return RET_ERROR;
     }
 
-    if(processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_RIGHT) == RET_ERROR){
+    if(tree_text[*symbol_idx_p] == '(' && processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_RIGHT) == RET_ERROR){
 
         return RET_ERROR;
     }
@@ -131,26 +135,7 @@ return_codes processBrunch(node_t* const parent_p, const char* const tree_text, 
 
     node_t** node_p_p = getBranchPointer(parent_p, branch_code);
 
-    while(tree_text[(*symbol_idx_p)++] != '('){
-
-    }
-
-    if(strncmp(tree_text + *symbol_idx_p, "nil)", 4) == 0){
-
-        *node_p_p = NULL;
-        *symbol_idx_p += 4;
-
-        ON_DEBUG(
-
-        printf("Find NIL for <");
-        printValueOfNode(stdout, parent_p->full_value);
-        printf(">, branch %d\n", branch_code);
-
-        )
-
-        return RET_CORRECT;
-
-    }
+    (*symbol_idx_p)++; // Скипаем ( и смотрим на сам аргумент
 
     if(parseNodeValue(tree_text, symbol_idx_p, &full_value) == RET_ERROR){
 
@@ -172,7 +157,14 @@ return_codes processBrunch(node_t* const parent_p, const char* const tree_text, 
         return RET_ERROR;
     }
 
-    return createSubtreeFromFile(*node_p_p, tree_text, symbol_idx_p);
+    if(createSubtreeFromFile(*node_p_p, tree_text, symbol_idx_p) == RET_ERROR){
+
+        return RET_ERROR;
+    }
+
+    (*symbol_idx_p)++; // Скипаем ), полностью завершая обработку ветки
+
+    return RET_CORRECT;
 }
 
 return_codes parseNodeValue(const char* const      tree_text,
@@ -185,7 +177,8 @@ return_codes parseNodeValue(const char* const      tree_text,
     //xy
     //+-/*!
 
-    if(tree_text[*symbol_idx_p] >= 'a' && tree_text[*symbol_idx_p] <= 'z'){
+
+    if(tree_text[*symbol_idx_p] >= 'x' && tree_text[*symbol_idx_p] <= 'z'){
 
         full_value_p->node_type = VARIABLE_NODE;
 
@@ -220,6 +213,7 @@ return_codes parseNodeValue(const char* const      tree_text,
 
         full_value_p->node_type = OPERATION_NODE;
 
+        printf("%s\n", tree_text + *symbol_idx_p);
         if(tree_text[*symbol_idx_p] == '+'){
 
             full_value_p->value.operation_code = ADD;
@@ -228,12 +222,29 @@ return_codes parseNodeValue(const char* const      tree_text,
 
             full_value_p->value.operation_code = SUB;
 
+        }else if(tree_text[*symbol_idx_p] == '*'){
+
+            full_value_p->value.operation_code = MUL;
+
+        }else if(tree_text[*symbol_idx_p] == '/'){
+
+            full_value_p->value.operation_code = DIV;
+
+        }else if(strncmp(tree_text + *symbol_idx_p, "sin", 3) == 0){
+
+            full_value_p->value.operation_code = SIN;
+
         }else{
 
-            printf(RED_COLOR "ERROR: incorrect node value in file" DEFAULT_COLOR);
+            printf(RED_COLOR "ERROR: incorrect value of node, incorrect operation\n" DEFAULT_COLOR);
 
             return RET_ERROR;
         }
+    }
+
+    while(tree_text[(*symbol_idx_p)] != '(' && tree_text[(*symbol_idx_p)] != ')'){
+
+        (*symbol_idx_p)++;
     }
 
     return RET_CORRECT;
@@ -281,10 +292,23 @@ void printOperation(FILE* const out_file_p, const node_full_value_t node_full_va
 
             fprintf(out_file_p, "-");
             break;
+        case MUL:
+
+            fprintf(out_file_p, "*");
+            break;
+
+        case DIV:
+
+            fprintf(out_file_p, "/");
+            break;
+        case SIN:
+
+            fprintf(out_file_p, "sin");
+            break;
 
         default:
 
-            printf(RED_COLOR "ERROR: incorrect value of node: incorrect operation\n" DEFAULT_COLOR);
+            printf(RED_COLOR "ERROR: incorrect value of node to print: incorrect operation\n" DEFAULT_COLOR);
     }
 }
 
