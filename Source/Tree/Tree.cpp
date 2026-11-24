@@ -28,8 +28,62 @@ return_codes createNode(node_t** const    new_node_p_p,
     (*new_node_p_p)->right_p    = right_p;
     (*new_node_p_p)->full_value = full_value;
 
+    if(left_p != NULL){
+
+        left_p->parent_p  = *new_node_p_p;
+    }
+
+    if(right_p != NULL){
+
+        right_p->parent_p = *new_node_p_p;
+    }
+
     return RET_CORRECT;
 }
+node_t* integratedCreateNode(node_full_value_t full_value, node_t* left_p, node_t* right_p){
+
+    node_t* new_node_p = NULL;
+
+    createNode(&new_node_p, full_value, left_p, right_p);
+
+    return new_node_p;
+}
+
+node_t* createConstNode(double value, node_t* left_p, node_t* right_p){
+
+    node_full_value_t full_node_value = {.node_type = CONST_NODE, .value = { .const_value = value}};
+
+    node_t* new_node_p = NULL;
+
+    createNode(&new_node_p, full_node_value, left_p, right_p);
+
+    return new_node_p;
+}
+
+node_t* createVarNode(var_codes value, node_t* left_p, node_t* right_p){
+
+
+    node_full_value_t full_node_value = {.node_type = VARIABLE_NODE, .value = { .var_code  = value}};
+
+    node_t* new_node_p = NULL;
+
+    createNode(&new_node_p, full_node_value, left_p, right_p);
+
+    return new_node_p;
+}
+
+node_t* createOpNode(operation_codes value, node_t* left_p, node_t* right_p){
+
+    node_full_value_t full_node_value = {.node_type = OPERATION_NODE, .value = { .operation_code = value}};
+
+    node_t* new_node_p = NULL;
+
+    createNode(&new_node_p, full_node_value, left_p, right_p);
+
+    return new_node_p;
+}
+
+
 
 return_codes createSheet(node_t* const parent_p, branch_codes branch_code, node_full_value_t full_value){
 
@@ -80,7 +134,42 @@ return_codes deleteSheet(node_t* const parent_p, branch_codes branch_code){
     return RET_CORRECT;
 }
 
-node_t** getBranchPointer(node_t * parent_p, const branch_codes branch_code){
+void deleteTree(node_t* const root_p){
+
+    if(root_p->left_p == NULL && root_p->right_p == NULL){
+
+        deleteNode(root_p);
+
+    }else{
+
+        deleteNode(root_p->left_p );
+        deleteNode(root_p->right_p);
+    }
+}
+
+void deleteSubTree(node_t* const parent_p, branch_codes branch_code){
+
+    node_t** root_of_subtree_p_p = getBranchPointer(parent_p, branch_code); //Указатель на указатель на лист внутри структуры родителя
+
+    if(*root_of_subtree_p_p == NULL){
+
+        return;
+    }
+
+    if((*root_of_subtree_p_p)->left_p == NULL && (*root_of_subtree_p_p)->right_p == NULL){
+
+        deleteNode((*root_of_subtree_p_p));
+
+    }else{
+
+        deleteNode((*root_of_subtree_p_p)->left_p );
+        deleteNode((*root_of_subtree_p_p)->right_p);
+    }
+
+    (*root_of_subtree_p_p) = NULL;
+}
+
+node_t** getBranchPointer(node_t* const parent_p, const branch_codes branch_code){
 
     assert(parent_p);
 
@@ -101,4 +190,14 @@ node_t** getBranchPointer(node_t * parent_p, const branch_codes branch_code){
             printf(RED_COLOR "ERROR: incorrect enum value in getBrunchPointer function: %d\n" DEFAULT_COLOR, branch_code);
             return NULL;
     }
+}
+
+node_t* createCopy(const node_t* const root_p){
+
+    if(root_p == NULL){
+
+        return NULL;
+    }
+
+    return integratedCreateNode(root_p->full_value, createCopy(root_p->left_p), createCopy(root_p->right_p));
 }

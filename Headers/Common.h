@@ -15,15 +15,27 @@ enum return_codes{
 };
 
 
-#ifdef DEBUG
+#ifdef DEBUG_VIS
 
-    #define ON_DEBUG(...) __VA_ARGS__
-    #define OFF_DEBUG(...)
+    #define ON_DEBUG_VIS(...) __VA_ARGS__
+    #define OFF_DEBUG_VIS(...)
 
 #else
 
-    #define ON_DEBUG(...)
-    #define OFF_DEBUG(...) __VA_ARGS__
+    #define ON_DEBUG_VIS(...)
+    #define OFF_DEBUG_VIS(...) __VA_ARGS__
+
+#endif
+
+#ifdef DEBUG_CONSOLE
+
+    #define ON_DEBUG_CONSOLE(...) __VA_ARGS__
+    #define OFF_DEBUG_CONSOLE(...)
+
+#else
+
+    #define ON_DEBUG_CONSOLE(...)
+    #define OFF_DEBUG_CONSOLE(...) __VA_ARGS__
 
 #endif
 

@@ -1,6 +1,8 @@
 #ifndef TREE_COMMON_H
 #define TREE_COMMON_H
 
+#include "..\Operations.h"
+
 enum types_of_node{
 
     CONST_NODE    ,
@@ -12,15 +14,6 @@ enum branch_codes{
 
     BRANCH_LEFT ,
     BRANCH_RIGHT
-};
-
-enum operation_codes{
-
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    SIN
 };
 
 enum var_codes{

@@ -32,6 +32,7 @@ void printSubtreeInFile(const node_t* const root_p, FILE* const out_file_p){
     }else{
 
         fprintf(out_file_p, "(");
+
         printValueOfNode(out_file_p, root_p->full_value);
 
         printSubtreeInFile(root_p->left_p, out_file_p);
@@ -98,9 +99,13 @@ return_codes startProcessingFile(node_t** const root_p_p, const char* const tree
         return RET_ERROR;
     }
 
-    printf("Done root with value: <");
+    ON_DEBUG_CONSOLE(
+
+    printf("Processed root with value: <");
     printValueOfNode(stdout, full_value);
     printf(">\n");
+
+    )
 
     return createSubtreeFromFile(*root_p_p, tree_text, &symbol_idx);
 }
@@ -111,12 +116,12 @@ return_codes createSubtreeFromFile(node_t* const parent_p, const char* const tre
     assert(symbol_idx_p);
     assert(tree_text);
 
-    if(tree_text[*symbol_idx_p] == '(' && processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_LEFT ) == RET_ERROR){
+    if(tree_text[*symbol_idx_p] == '(' && processBranch(parent_p, tree_text, symbol_idx_p, BRANCH_LEFT ) == RET_ERROR){
 
         return RET_ERROR;
     }
 
-    if(tree_text[*symbol_idx_p] == '(' && processBrunch(parent_p, tree_text, symbol_idx_p, BRANCH_RIGHT) == RET_ERROR){
+    if(tree_text[*symbol_idx_p] == '(' && processBranch(parent_p, tree_text, symbol_idx_p, BRANCH_RIGHT) == RET_ERROR){
 
         return RET_ERROR;
     }
@@ -124,7 +129,7 @@ return_codes createSubtreeFromFile(node_t* const parent_p, const char* const tre
     return RET_CORRECT;
 }
 
-return_codes processBrunch(node_t* const parent_p, const char* const tree_text, size_t* const symbol_idx_p, const branch_codes branch_code){
+return_codes processBranch(node_t* const parent_p, const char* const tree_text, size_t* const symbol_idx_p, const branch_codes branch_code){
 
     assert(parent_p);
     assert(symbol_idx_p);
@@ -141,7 +146,7 @@ return_codes processBrunch(node_t* const parent_p, const char* const tree_text, 
         return RET_ERROR;
     }
 
-    ON_DEBUG(
+    ON_DEBUG_CONSOLE(
 
     printf("Create kid of <");
     printValueOfNode(stdout, parent_p->full_value);
@@ -166,16 +171,15 @@ return_codes processBrunch(node_t* const parent_p, const char* const tree_text, 
     return RET_CORRECT;
 }
 
-return_codes parseNodeValue(const char* const      tree_text,
-                            size_t* const          symbol_idx_p,
+return_codes parseNodeValue(const char* const        tree_text,
+                            size_t* const            symbol_idx_p,
                             node_full_value_t* const full_value_p){
 
     assert(tree_text);
     assert(symbol_idx_p);
     assert(full_value_p);
-    //xy
-    //+-/*!
 
+    ON_DEBUG_CONSOLE( printf("Parse str: %s\n", tree_text + *symbol_idx_p); )
 
     if(tree_text[*symbol_idx_p] >= 'x' && tree_text[*symbol_idx_p] <= 'z'){
 
@@ -188,6 +192,7 @@ return_codes parseNodeValue(const char* const      tree_text,
         }else if(tree_text[*symbol_idx_p] == 'y'){
 
             full_value_p->value.var_code = Y_VAR;
+
         }else{
 
             printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx variable with name: <%c>\n" DEFAULT_COLOR,
@@ -212,32 +217,22 @@ return_codes parseNodeValue(const char* const      tree_text,
 
         full_value_p->node_type = OPERATION_NODE;
 
-        printf("%s\n", tree_text + *symbol_idx_p);
-        if(tree_text[*symbol_idx_p] == '+'){
+        for(size_t i = 0; i < sizeof(OPERATIONS); i++){
 
-            full_value_p->value.operation_code = ADD;
+            if(strncmp(tree_text + *symbol_idx_p, OPERATIONS[i].txt_form, strlen(OPERATIONS[i].txt_form)) == 0){
 
-        }else if(tree_text[*symbol_idx_p] == '-'){
+                full_value_p->value.operation_code = OPERATIONS[i].code;
 
-            full_value_p->value.operation_code = SUB;
+                ON_DEBUG_CONSOLE( printf("Detected operation %s\n", OPERATIONS[i].txt_form); )
 
-        }else if(tree_text[*symbol_idx_p] == '*'){
+                break;
 
-            full_value_p->value.operation_code = MUL;
+            }else if(i == sizeof(OPERATIONS) - 1){
 
-        }else if(tree_text[*symbol_idx_p] == '/'){
+                ON_DEBUG_CONSOLE( printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx incorrect name of operation\n" DEFAULT_COLOR, *symbol_idx_p); )
 
-            full_value_p->value.operation_code = DIV;
-
-        }else if(strncmp(tree_text + *symbol_idx_p, "sin", 3) == 0){
-
-            full_value_p->value.operation_code = SIN;
-
-        }else{
-
-            printf(RED_COLOR "ERROR: incorrect value of node, incorrect operation\n" DEFAULT_COLOR);
-
-            return RET_ERROR;
+                return RET_ERROR;
+            }
         }
     }
 
@@ -245,6 +240,8 @@ return_codes parseNodeValue(const char* const      tree_text,
 
         (*symbol_idx_p)++;
     }
+
+    ON_DEBUG_CONSOLE( printf("idx: %llu\n", *symbol_idx_p); )
 
     return RET_CORRECT;
 }
@@ -280,35 +277,8 @@ void printOperation(FILE* const out_file_p, const node_full_value_t node_full_va
 
     assert(out_file_p);
 
-    switch(node_full_value.value.operation_code){
+    fprintf(out_file_p, "%s", OPERATIONS[node_full_value.value.operation_code].txt_form);
 
-        case ADD:
-
-            fprintf(out_file_p, "+");
-            break;
-
-        case SUB:
-
-            fprintf(out_file_p, "-");
-            break;
-        case MUL:
-
-            fprintf(out_file_p, "*");
-            break;
-
-        case DIV:
-
-            fprintf(out_file_p, "/");
-            break;
-        case SIN:
-
-            fprintf(out_file_p, "sin");
-            break;
-
-        default:
-
-            printf(RED_COLOR "ERROR: incorrect value of node to print: incorrect operation\n" DEFAULT_COLOR);
-    }
 }
 
 void printVar(FILE* const out_file_p, const node_full_value_t node_full_value){

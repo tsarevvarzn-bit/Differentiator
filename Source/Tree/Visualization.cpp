@@ -62,7 +62,7 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     assert(root_p);
     assert(out_file_p);
 
-    ON_DEBUG(
+    ON_DEBUG_VIS(
 
     fprintf(out_file_p,
     "    \"%p\" [label= \"{\n"
@@ -85,7 +85,7 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
 
     )
 
-    OFF_DEBUG(
+    OFF_DEBUG_VIS(
 
     fprintf(out_file_p,
     "    \"%p\" [label = \"",
@@ -107,26 +107,26 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     if(root_p->left_p == NULL){
 
         addTreeToVisualization(root_p->right_p, out_file_p);
-        ON_DEBUG( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n", root_p, root_p->right_p);)
-        OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->right_p);)
+        ON_DEBUG_VIS( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n", root_p, root_p->right_p);)
+        OFF_DEBUG_VIS(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->right_p);)
         return;
     }
 
     if(root_p->right_p == NULL){
 
         addTreeToVisualization(root_p->left_p, out_file_p);
-        ON_DEBUG( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n", root_p, root_p->left_p);)
-        OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->left_p);)
+        ON_DEBUG_VIS( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n", root_p, root_p->left_p);)
+        OFF_DEBUG_VIS(fprintf(out_file_p, "   \"%p\"->\"%p\"\n", root_p, root_p->left_p);)
         return;
     }
 
     addTreeToVisualization(root_p->left_p , out_file_p);
     addTreeToVisualization(root_p->right_p, out_file_p);
 
-    ON_DEBUG( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n" , root_p, root_p->left_p );)
-    OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"      , root_p, root_p->left_p );)
-    ON_DEBUG( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n" , root_p, root_p->right_p);)
-    OFF_DEBUG(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"       , root_p, root_p->right_p);)
+    ON_DEBUG_VIS( fprintf(out_file_p, "   \"%p\":left->\"%p\"\n" , root_p, root_p->left_p );)
+    OFF_DEBUG_VIS(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"      , root_p, root_p->left_p );)
+    ON_DEBUG_VIS( fprintf(out_file_p, "   \"%p\":right->\"%p\"\n" , root_p, root_p->right_p);)
+    OFF_DEBUG_VIS(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"       , root_p, root_p->right_p);)
 
     fprintf(out_file_p, "   {rank=same; \"%p\"; \"%p\"}\n", root_p->left_p, root_p->left_p);
 }

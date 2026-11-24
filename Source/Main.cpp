@@ -3,18 +3,27 @@
 int main(){
 
     node_t* root_p = NULL;
-//     node_full_value_t full_root_value = {.node_type = OPERATION_NODE, .value = {.operation_code = ADD}};
-//     createNode(&root_p, full_root_value, NULL, NULL);
-//
-//     node_full_value_t value_left =  {.node_type = CONST_NODE   , .value = {.const_value = 10}};
-//     node_full_value_t value_right = {.node_type = VARIABLE_NODE, .value = {.var_code = X_VAR}};
-//
-//     createSheet(root_p, BRANCH_LEFT , value_left);
-//     createSheet(root_p, BRANCH_RIGHT, value_right);
 
     createTreeFromFile(&root_p, "Tree1.txt");
 
     visualizeTree(root_p, "Tree1.svg");
 
-    printTreeInFile(root_p, "Tree1.txt");
+
+    node_t* root_diff_p = differentiateSubtree(root_p);
+
+    visualizeTree(root_diff_p, "Tree2.svg");
+
+
+    node_t* root_diff_simpl_p = createCopy(root_diff_p);
+
+    printf("%d", simplifyConstSubtrees(root_diff_simpl_p));
+
+    visualizeTree(root_diff_simpl_p, "Tree3.svg");
+
+
+    printf("%d", simplifyConstSubtrees(root_diff_simpl_p));
+
+    visualizeTree(root_diff_simpl_p, "Tree4.svg");
+
+    //printTreeInFile(root_p, "Tree1.txt");
 }

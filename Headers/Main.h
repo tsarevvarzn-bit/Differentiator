@@ -8,4 +8,7 @@
 #include ".\Tree\TreeTextFormat.h"
 #include ".\Tree\Visualization.h"
 
+#include "Differentiator.h"
+#include "Simplifier.h"
+
 #endif
