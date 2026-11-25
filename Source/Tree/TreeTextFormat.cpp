@@ -173,7 +173,7 @@ return_codes processBranch(node_t* const parent_p, const char* const tree_text, 
 
 return_codes parseNodeValue(const char* const        tree_text,
                             size_t* const            symbol_idx_p,
-                            node_full_value_t* const full_value_p){
+                            node_full_value_t* const full_value_p){ //TODO поделить
 
     assert(tree_text);
     assert(symbol_idx_p);
@@ -221,7 +221,7 @@ return_codes parseNodeValue(const char* const        tree_text,
 
             if(strncmp(tree_text + *symbol_idx_p, OPERATIONS[i].txt_form, strlen(OPERATIONS[i].txt_form)) == 0){
 
-                full_value_p->value.operation_code = OPERATIONS[i].code;
+                full_value_p->value.operation_code = (operation_codes) i;
 
                 ON_DEBUG_CONSOLE( printf("Detected operation %s\n", OPERATIONS[i].txt_form); )
 

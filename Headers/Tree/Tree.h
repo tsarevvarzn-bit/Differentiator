@@ -9,7 +9,7 @@ return_codes createNode       (node_t** const    new_node_p_p,
                                node_t*           left_p,
                                node_t*           right_p);
 
-node_t* integratedCreateNode(node_full_value_t full_value, node_t* left_p, node_t* right_p);
+node_t* integratedCreateNode (node_full_value_t full_value, node_t* left_p, node_t* right_p);
 
 node_t* createConstNode(double value         , node_t* left_p, node_t* right_p);
 node_t* createVarNode  (var_codes value      , node_t* left_p, node_t* right_p);
@@ -25,6 +25,6 @@ void         deleteSubTree    (node_t* const parent_p, branch_codes branch_code)
 node_t**     getBranchPointer (node_t* const parent_p, const branch_codes branch_code);
 node_t*      createCopy       (const node_t* const root_p);
 
-
+void         replaceRootWithSubtree(node_t* const root_p, const branch_codes branch_code);
 
 #endif

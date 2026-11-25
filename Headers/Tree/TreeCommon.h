@@ -22,7 +22,7 @@ enum var_codes{
     Y_VAR
 };
 
-struct node_value_t{// TODO union
+union node_value_t{// TODO union
 
     double          const_value   ;
     operation_codes operation_code;

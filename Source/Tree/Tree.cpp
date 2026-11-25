@@ -201,3 +201,34 @@ node_t* createCopy(const node_t* const root_p){
 
     return integratedCreateNode(root_p->full_value, createCopy(root_p->left_p), createCopy(root_p->right_p));
 }
+
+
+void replaceRootWithSubtree(node_t* const root_p, const branch_codes branch_code){
+
+    assert(root_p);
+
+    node_t* subtree_p = *getBranchPointer(root_p, branch_code);
+
+    assert(subtree_p);
+
+    root_p->full_value = subtree_p->full_value;
+    root_p->left_p     = subtree_p->left_p    ;
+    root_p->right_p    = subtree_p->right_p   ;
+
+    if(subtree_p->left_p != NULL){
+
+        subtree_p->left_p->parent_p = root_p;
+
+    }
+
+    if(subtree_p->right_p != NULL){
+
+        subtree_p->right_p->parent_p = root_p;
+
+    }
+
+    subtree_p->left_p  = NULL;
+    subtree_p->right_p = NULL;
+
+    deleteNode(subtree_p);
+}

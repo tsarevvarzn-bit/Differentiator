@@ -30,9 +30,9 @@ node_t* differentiateSubtree(const node_t* const func_root_p){
 
             case DIV:   return _DIV(_SUB(_MUL(_DL, _CR), _MUL(_CL, _DR)), _MUL(_CR, _CR));
 
-            case SIN:   return _COS(_CL);
+            case SIN:   return _MUL(_COS(_CL), _DL);
 
-            case COS:   return _SUB(_NUM(0), _SIN(_CL));
+            case COS:   return _MUL(_SUB(_NUM(0), _SIN(_CL)), _DL);
 
             case POW:   return diffPow(func_root_p);
 
@@ -51,20 +51,3 @@ node_t* diffPow(const node_t* const func_root_p){
     node_t* right_part = _ADD(_MUL(_DIV(_CR, _CL), _DL), _MUL(_LN(_CL), _DR));
     return _MUL(_POW(_CL, _CR), right_part);
 }
-
-
-
-
-
-
-//
-// Производная суммы:
-//
-// _ADD(_MUL(_DL, _CR), _MUL(_CL, _DR))
-//
-//
-//
-// _ADD:
-//
-// createNodeSep(func_diff_root_p, CONST_NODE, .vazlue = {.const_value = 10}, NULL, NULL)
-

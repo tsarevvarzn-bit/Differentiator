@@ -21,7 +21,7 @@ int main(){
     visualizeTree(root_diff_simpl_p, "Tree3.svg");
 
 
-    printf("%d", simplifyConstSubtrees(root_diff_simpl_p));
+    printf("%d", deleteNeutralNodes(root_diff_simpl_p));
 
     visualizeTree(root_diff_simpl_p, "Tree4.svg");
 

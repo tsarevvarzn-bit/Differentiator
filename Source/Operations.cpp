@@ -10,13 +10,15 @@ double name_of_func(double left_arg, double right_arg){     \
 #define CHECK_RIGHT_ARGUMENT                                                                                                            \
                                                                                                                                         \
 if(! isnan(right_arg))                                                                                                                  \
-    printf(YELLOW_COLOR "Warning: not a NULL value of right arg of unary function for calculation: %lg, " DEFAULT_COLOR, right_arg)    \
+    printf(YELLOW_COLOR "Warning: not a NULL value of right arg of unary function for calculation: %lg, " DEFAULT_COLOR, right_arg)     \
 
 
 CREATE_NEW_BIN_CALC_FUNC(calcAdd, +)
 CREATE_NEW_BIN_CALC_FUNC(calcSub, -)
 CREATE_NEW_BIN_CALC_FUNC(calcMul, *)
 CREATE_NEW_BIN_CALC_FUNC(calcDiv, /)
+
+// TODO sin cod ln define
 
 double calcSin(double left_arg, double right_arg){
 
