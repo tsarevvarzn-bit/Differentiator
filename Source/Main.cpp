@@ -4,23 +4,23 @@ int main(){
 
     node_t* root_p = NULL;
 
-    createTreeFromFile(&root_p, "Tree1.txt");
+    createTreeFromFile(&root_p, ".\\TxtTrees\\Tree2.txt");
 
-    visualizeTree(root_p, "DefaultTree.svg");
+    visualizeTree(root_p, ".\\Dump\\DefaultTree.svg");
 
     node_t* simpl_default = simplifyTree(root_p);
 
-    visualizeTree(simpl_default, "DefaultSimplTree.svg");
+    visualizeTree(simpl_default, ".\\Dump\\DefaultSimplTree.svg");
 
     node_t* root_diff_p = differentiateSubtree(simpl_default);
 
-    visualizeTree(root_diff_p, "TreeDiff.svg");
+    visualizeTree(root_diff_p, ".\\Dump\\TreeDiff.svg");
 
     node_t* root_diff_simpl_p = simplifyTree(root_diff_p);
 
-    visualizeTree(root_diff_simpl_p, "TreeDiffSimpl.svg");
+    visualizeTree(root_diff_simpl_p, ".\\Dump\\TreeDiffSimpl.svg");
 
-    FILE* log_md_file_p = fopen("LofFile.md", "w");
+    FILE* log_md_file_p = fopen(".\\Dump\\LofFile.md", "w");
 
     fprintf(log_md_file_p, "# DefaultTree:");
     printTreeInTexFormat(log_md_file_p, root_p);

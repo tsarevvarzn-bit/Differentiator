@@ -101,12 +101,22 @@ return_codes createSheet(node_t* const parent_p, branch_codes branch_code, node_
 
 return_codes deleteNode(node_t* const node_p){
 
+    if(node_p == NULL){
+
+        printf("ERROR BLYA");
+        printNodeType(stdout, node_p->full_value);
+        printValueOfNode(stdout, node_p->full_value);
+    }
+
+
     assert(node_p);
 
     if(node_p->left_p != NULL || node_p->right_p != NULL){
 
         printf(RED_COLOR "ERROR: node for delete: %p have branches: left: %p, right: %p, delete them first!\n" DEFAULT_COLOR,
         node_p, node_p->left_p, node_p->right_p);
+
+
 
         return RET_ERROR;
     }
@@ -134,15 +144,22 @@ return_codes deleteSheet(node_t* const parent_p, branch_codes branch_code){
 
 void deleteTree(node_t* const root_p){
 
-    if(root_p->left_p == NULL && root_p->right_p == NULL){
+    assert(root_p);
 
-        deleteNode(root_p);
 
-    }else{
+    if(root_p->left_p != NULL){
 
-        deleteNode(root_p->left_p );
-        deleteNode(root_p->right_p);
+        deleteTree(root_p->left_p );
+        root_p->left_p = NULL;
     }
+
+    if(root_p->right_p != NULL){
+
+        deleteTree(root_p->right_p);
+        root_p->right_p = NULL;
+    }
+
+    deleteNode(root_p);
 }
 
 void deleteSubTree(node_t* const parent_p, branch_codes branch_code){
@@ -154,15 +171,23 @@ void deleteSubTree(node_t* const parent_p, branch_codes branch_code){
         return;
     }
 
-    if((*root_of_subtree_p_p)->left_p == NULL && (*root_of_subtree_p_p)->right_p == NULL){
-
-        deleteNode((*root_of_subtree_p_p));
-
-    }else{
-
-        deleteNode((*root_of_subtree_p_p)->left_p );
-        deleteNode((*root_of_subtree_p_p)->right_p);
-    }
+    deleteTree((*root_of_subtree_p_p));
+//     if((*root_of_subtree_p_p)->left_p == NULL && (*root_of_subtree_p_p)->right_p == NULL){
+//
+//         deleteNode((*root_of_subtree_p_p));
+//
+//     }else{
+//
+//         if((*root_of_subtree_p_p)->left_p != NULL){
+//
+//             deleteTree((*root_of_subtree_p_p)->left_p );
+//         }
+//
+//         if((*root_of_subtree_p_p)->right_p != NULL){
+//
+//             deleteTree((*root_of_subtree_p_p)->right_p);
+//         }
+//     }
 
     (*root_of_subtree_p_p) = NULL;
 }

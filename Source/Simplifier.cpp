@@ -186,7 +186,7 @@ bool optimizeAddSub(node_t* root_p){
     assert(root_p->right_p);
 
 
-    if(IS_LEFT(0)){
+    if(IS_LEFT(0) && root_p->full_value.value.operation_code != SUB){
 
         deleteSheet(root_p, BRANCH_LEFT);
 

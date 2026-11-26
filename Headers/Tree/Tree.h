@@ -3,6 +3,7 @@
 
 #include "..\Common.h"
 #include "TreeCommon.h"
+#include "TreeTextFormat.h"
 
 return_codes createNode       (node_t** const    new_node_p_p,
                                node_full_value_t full_value,

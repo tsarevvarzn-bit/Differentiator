@@ -5,7 +5,7 @@ void visualizeTree(const node_t* const root_p, const char * const name_of_file){
     assert(root_p);
     assert(name_of_file);
 
-    FILE* out_dot_file_p = fopen("DataForVisualization.dot", "w");
+    FILE* out_dot_file_p = fopen(NAME_OF_DOT_DATA_FILE, "w");
 
 
     fprintf(out_dot_file_p,
@@ -41,7 +41,7 @@ void visualizeTree(const node_t* const root_p, const char * const name_of_file){
 
     char str_for_system_call[MAX_LEN_OF_STR_FOR_SYSTEM_CALL] = "";
 
-    sprintf(str_for_system_call, "dot.exe -Tsvg DataForVisualization.dot -o %s", name_of_file);
+    sprintf(str_for_system_call, "dot.exe -Tsvg %s -o %s", NAME_OF_DOT_DATA_FILE, name_of_file);
 
     int result = system(str_for_system_call);
 
