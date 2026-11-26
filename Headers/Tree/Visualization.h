@@ -11,5 +11,7 @@ const int SYSTEM_CORRECT_RETURN          =   0;
 void visualizeTree             (const node_t* const root_p, const char * const name_of_file);
 void addTreeToVisualization    (const node_t* const root_p, FILE* const out_file_p);
 
+const char* getNodeColor(const node_t* const root_p);
+
 
 #endif

@@ -6,27 +6,31 @@ int main(){
 
     createTreeFromFile(&root_p, "Tree1.txt");
 
-    visualizeTree(root_p, "Tree1.svg");
+    visualizeTree(root_p, "DefaultTree.svg");
 
-//
-//     node_t* root_diff_p = differentiateSubtree(root_p);
-//
-//     visualizeTree(root_diff_p, "Tree2.svg");
-//
-//
-//     node_t* root_diff_simpl_p = createCopy(root_diff_p);
-//
-//     printf("%d", simplifyConstSubtrees(root_diff_simpl_p));
-//
-//     visualizeTree(root_diff_simpl_p, "Tree3.svg");
-//
-//
-//     printf("%d", deleteNeutralNodes(root_diff_simpl_p));
-//
-//     visualizeTree(root_diff_simpl_p, "Tree4.svg");
+    node_t* simpl_default = simplifyTree(root_p);
 
-    //printTreeInFile(root_p, "Tree1.txt");
+    visualizeTree(simpl_default, "DefaultSimplTree.svg");
+
+    node_t* root_diff_p = differentiateSubtree(simpl_default);
+
+    visualizeTree(root_diff_p, "TreeDiff.svg");
+
+    node_t* root_diff_simpl_p = simplifyTree(root_diff_p);
+
+    visualizeTree(root_diff_simpl_p, "TreeDiffSimpl.svg");
 
     FILE* log_md_file_p = fopen("LofFile.md", "w");
+
+    fprintf(log_md_file_p, "# DefaultTree:");
     printTreeInTexFormat(log_md_file_p, root_p);
+
+    fprintf(log_md_file_p, "# DefaultSimplTree:");
+    printTreeInTexFormat(log_md_file_p, simpl_default);
+
+    fprintf(log_md_file_p, "# TreeDiff:");
+    printTreeInTexFormat(log_md_file_p, root_diff_p);
+
+    fprintf(log_md_file_p, "# TreeDiffSimpl:");
+    printTreeInTexFormat(log_md_file_p, root_diff_simpl_p);
 }

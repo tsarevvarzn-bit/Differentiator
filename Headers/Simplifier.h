@@ -12,6 +12,8 @@
 
 const double EPSILON = 0.0001;
 
+node_t*   simplifyTree(const node_t* const root_p);
+
 bool   simplifyConstSubtrees(node_t* orig_func_root_p);
 double calculateConstSubtree(const node_t* const func_root_p);
 

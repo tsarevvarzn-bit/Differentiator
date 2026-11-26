@@ -3,6 +3,29 @@
 #define IS_LEFT(x) ((root_p->left_p->full_value.node_type == CONST_NODE) && (isZero(root_p->left_p->full_value.value.const_value - x)))
 #define IS_RIGHT(x) ((root_p->right_p->full_value.node_type == CONST_NODE) && (isZero(root_p->right_p->full_value.value.const_value - x)))
 
+//TODO common simplify
+
+node_t* simplifyTree(const node_t* const root_p){
+
+    assert(root_p);
+
+    node_t* tree_copy_p = createCopy(root_p);
+
+    if(tree_copy_p == NULL){
+
+        printf(RED_COLOR "ERROR: can't copy tree to make simple copy of this tree\n" DEFAULT_COLOR);
+        return NULL;
+    }
+
+    do{
+
+        simplifyConstSubtrees(tree_copy_p);
+
+    }while(deleteNeutralNodes(tree_copy_p));
+
+    return tree_copy_p;
+}
+
 bool simplifyConstSubtrees(node_t* orig_func_root_p){
 
     if(orig_func_root_p == NULL){
@@ -95,7 +118,6 @@ double calculateConstSubtree(const node_t* const func_root_p){
     return value_of_tree;
 }
 
-// Должны дойти до дна и все оптимизировать снизу вверх
 
 bool deleteNeutralNodes(node_t* root_p){
 
@@ -163,15 +185,12 @@ bool optimizeAddSub(node_t* root_p){
     assert(root_p->left_p);
     assert(root_p->right_p);
 
-    printf("LABUBA\n\n");
 
     if(IS_LEFT(0)){
 
         deleteSheet(root_p, BRANCH_LEFT);
 
         replaceRootWithSubtree(root_p, BRANCH_RIGHT);
-
-        printf("LABUBA_LEFT\n\n");
 
         return true;
     }
@@ -181,8 +200,6 @@ bool optimizeAddSub(node_t* root_p){
         deleteSheet(root_p, BRANCH_RIGHT);
 
         replaceRootWithSubtree(root_p, BRANCH_LEFT);
-
-        printf("LABUBA_LEFT\n\n");
 
         return true;
     }

@@ -62,6 +62,8 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     assert(root_p);
     assert(out_file_p);
 
+    const char* node_color = getNodeColor(root_p);
+
     ON_DEBUG_VIS(
 
     fprintf(out_file_p,
@@ -80,8 +82,8 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
 
     fprintf(out_file_p,
     "|\n               { <left> left = \\\"%p\\\"| pointer = \\\"%p\\\" | <right> right = \\\"%p\\\"}\n"
-    "           }\"]\n\n",
-    root_p->left_p, root_p, root_p->right_p);
+    "           }\", fillcolor = \"%s]\n\n",
+    root_p->left_p, root_p, root_p->right_p, node_color);
 
     )
 
@@ -94,8 +96,8 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     printValueOfNode(out_file_p, root_p->full_value);
 
     fprintf(out_file_p,
-    "\n\"]\n\n"
-    );
+    "\", fillcolor = \"%s\"]\n\n"
+    , node_color);
 
     )
 
@@ -129,4 +131,29 @@ void addTreeToVisualization(const node_t* const root_p, FILE* const out_file_p){
     OFF_DEBUG_VIS(fprintf(out_file_p, "   \"%p\"->\"%p\"\n"       , root_p, root_p->right_p);)
 
     fprintf(out_file_p, "   {rank=same; \"%p\"; \"%p\"}\n", root_p->left_p, root_p->left_p);
+}
+
+const char* getNodeColor(const node_t* const root_p){
+
+    assert(root_p);
+
+    switch(root_p->full_value.node_type){
+
+        case CONST_NODE:
+
+            return "#40b940";
+
+        case OPERATION_NODE:
+
+            return "yellow" ;
+
+        case VARIABLE_NODE:
+
+            return "#4fb6b6";
+
+        default:
+
+            printf(RED_COLOR "ERROR: incorrect type of node %p while getting the color of node\n", root_p);
+            return "red";
+    }
 }

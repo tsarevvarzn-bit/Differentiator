@@ -6,11 +6,11 @@ void printTreeInTexFormat(FILE* const out_file_p, const node_t* const root_p){
     assert(out_file_p);
     assert(root_p);
 
-    fprintf(out_file_p, "$$");
+    fprintf(out_file_p, "\n$$");
 
     printSubtreeInTexFormat(out_file_p, root_p);
 
-    fprintf(out_file_p, "$$");
+    fprintf(out_file_p, "$$\n");
 }
 
 void printSubtreeInTexFormat(FILE* const out_file_p, const node_t* const root_p){
@@ -41,11 +41,11 @@ void printOpSubtreeInTexFormat(FILE* const out_file_p, const node_t* const root_
 
     operation_codes op_code = root_p->full_value.value.operation_code;
 
-    const char* l_l_parenthesis  = "\\left(";
-    const char* l_r_parenthesis  = "\\right)";
+    const char* l_l_parenthesis  = NULL;
+    const char* l_r_parenthesis  = NULL;
 
-    const char* r_l_parenthesis  = "\\left(";
-    const char* r_r_parenthesis  = "\\right)";
+    const char* r_l_parenthesis  = NULL;
+    const char* r_r_parenthesis  = NULL;
 
     getParenthesis(&l_l_parenthesis, &l_r_parenthesis, &r_l_parenthesis, &r_r_parenthesis, root_p);
 
@@ -96,7 +96,6 @@ void getParenthesis(const char* * const l_l_par_p,
     if(OPERATIONS[op_code].math_priority == 0){
 
         return;
-
     }
 
     unsigned char left_priority  = 0;
