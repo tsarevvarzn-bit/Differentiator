@@ -21,9 +21,12 @@ typedef double (*function_t)(double, double);
 
 struct operation_t{
 
-    const char*       txt_form   ;
-    unsigned char     num_of_args;
-    function_t        calc_func_p;
+    const char*       txt_form     ;
+    unsigned char     num_of_args  ;
+    function_t        calc_func_p  ;
+    bool              is_tex_pref  ;
+    const char*       tex_txt_form ;
+    unsigned char     math_priority;
 
 };
 
@@ -39,14 +42,14 @@ double calcLn (double left_arg, double right_arg);
 
 const operation_t OPERATIONS[] = {
 
-    {.txt_form = "+"  , .num_of_args = 2, .calc_func_p = calcAdd},
-    {.txt_form = "-"  , .num_of_args = 2, .calc_func_p = calcSub},
-    {.txt_form = "*"  , .num_of_args = 2, .calc_func_p = calcMul},
-    {.txt_form = "/"  , .num_of_args = 2, .calc_func_p = calcDiv},
-    {.txt_form = "sin", .num_of_args = 1, .calc_func_p = calcSin},
-    {.txt_form = "cos", .num_of_args = 1, .calc_func_p = calcCos},
-    {.txt_form = "^"  , .num_of_args = 2, .calc_func_p = calcPow},
-    {.txt_form = "ln" , .num_of_args = 1, .calc_func_p = calcLn }
+    {.txt_form = "+"  , .num_of_args = 2, .calc_func_p = calcAdd, .is_tex_pref = false, .tex_txt_form = "+"     , .math_priority = 2},
+    {.txt_form = "-"  , .num_of_args = 2, .calc_func_p = calcSub, .is_tex_pref = false, .tex_txt_form = "-"     , .math_priority = 2},
+    {.txt_form = "*"  , .num_of_args = 2, .calc_func_p = calcMul, .is_tex_pref = false, .tex_txt_form = "\\cdot", .math_priority = 1},
+    {.txt_form = "/"  , .num_of_args = 2, .calc_func_p = calcDiv, .is_tex_pref = true , .tex_txt_form = "\\frac", .math_priority = 3},
+    {.txt_form = "sin", .num_of_args = 1, .calc_func_p = calcSin, .is_tex_pref = true , .tex_txt_form = "\\sin" , .math_priority = 0},
+    {.txt_form = "cos", .num_of_args = 1, .calc_func_p = calcCos, .is_tex_pref = true , .tex_txt_form = "\\cos" , .math_priority = 0},
+    {.txt_form = "^"  , .num_of_args = 2, .calc_func_p = calcPow, .is_tex_pref = false, .tex_txt_form = "^"     , .math_priority = 0},
+    {.txt_form = "ln" , .num_of_args = 1, .calc_func_p = calcLn , .is_tex_pref = true , .tex_txt_form = "\\ln"  , .math_priority = 0}
 };
 
 #endif

@@ -10,5 +10,6 @@
 
 #include "Differentiator.h"
 #include "Simplifier.h"
+#include "LogPrinting.h"
 
 #endif

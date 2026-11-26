@@ -1,0 +1,1 @@
+$$\ln{\left({\left(\frac{ { { { 30 }-{\left(x\right)} }+{ { { \sin{\left(\frac{ { 10 }-{\left(x\right)} }{ y }\right)} }\cdot{ y } }+{ x } } }+{ 1 } }{ 10 }\right)}^{\left(\cos{\left(x\right)}\right)}\right)}$$

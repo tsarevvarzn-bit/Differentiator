@@ -276,6 +276,7 @@ void printValueOfNode(FILE* const out_file_p, const node_full_value_t node_full_
 void printOperation(FILE* const out_file_p, const node_full_value_t node_full_value){
 
     assert(out_file_p);
+    assert(node_full_value.node_type == OPERATION_NODE);
 
     fprintf(out_file_p, "%s", OPERATIONS[node_full_value.value.operation_code].txt_form);
 
@@ -284,6 +285,7 @@ void printOperation(FILE* const out_file_p, const node_full_value_t node_full_va
 void printVar(FILE* const out_file_p, const node_full_value_t node_full_value){
 
     assert(out_file_p);
+    assert(node_full_value.node_type == VARIABLE_NODE);
 
     switch(node_full_value.value.var_code){
 
