@@ -83,8 +83,6 @@ node_t* createOpNode(operation_codes value, node_t* left_p, node_t* right_p){
     return new_node_p;
 }
 
-
-
 return_codes createSheet(node_t* const parent_p, branch_codes branch_code, node_full_value_t full_value){
 
     assert(parent_p);

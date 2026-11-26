@@ -171,70 +171,31 @@ return_codes processBranch(node_t* const parent_p, const char* const tree_text, 
     return RET_CORRECT;
 }
 
-return_codes parseNodeValue(const char* const        tree_text,
+return_codes parseNodeValue(const char* const        tree_text   ,
                             size_t* const            symbol_idx_p,
-                            node_full_value_t* const full_value_p){ //TODO поделить
-
+                            node_full_value_t* const full_value_p){
     assert(tree_text);
     assert(symbol_idx_p);
     assert(full_value_p);
 
     ON_DEBUG_CONSOLE( printf("Parse str: %s\n", tree_text + *symbol_idx_p); )
 
+    return_codes return_code = RET_CORRECT;
+
+
     if(tree_text[*symbol_idx_p] >= 'x' && tree_text[*symbol_idx_p] <= 'z'){
 
-        full_value_p->node_type = VARIABLE_NODE;
-
-        if(tree_text[*symbol_idx_p] == 'x'){
-
-            full_value_p->value.var_code = X_VAR;
-
-        }else if(tree_text[*symbol_idx_p] == 'y'){
-
-            full_value_p->value.var_code = Y_VAR;
-
-        }else{
-
-            printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx variable with name: <%c>\n" DEFAULT_COLOR,
-            *symbol_idx_p, tree_text[*symbol_idx_p]);
-
-            return RET_ERROR;
-        }
+        return_code = parseVarValue(tree_text, symbol_idx_p, full_value_p);
 
     }else if(isdigit(tree_text[*symbol_idx_p]) || (tree_text[*symbol_idx_p] == '-' && isdigit(tree_text[(*symbol_idx_p) + 1]))){
 
-        full_value_p->node_type = CONST_NODE;
-
-        if(sscanf(tree_text + *symbol_idx_p, "%lg", &(full_value_p->value.const_value)) != 1){
-
-            printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx incorrect const number\n" DEFAULT_COLOR,
-            *symbol_idx_p);
-
-            return RET_ERROR;
-        }
+        return_code = parseConstValue(tree_text, symbol_idx_p, full_value_p);
 
     }else{
 
-        full_value_p->node_type = OPERATION_NODE;
-
-        for(size_t i = 0; i < sizeof(OPERATIONS); i++){
-
-            if(strncmp(tree_text + *symbol_idx_p, OPERATIONS[i].txt_form, strlen(OPERATIONS[i].txt_form)) == 0){
-
-                full_value_p->value.operation_code = (operation_codes) i;
-
-                ON_DEBUG_CONSOLE( printf("Detected operation %s\n", OPERATIONS[i].txt_form); )
-
-                break;
-
-            }else if(i == sizeof(OPERATIONS) - 1){
-
-                ON_DEBUG_CONSOLE( printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx incorrect name of operation\n" DEFAULT_COLOR, *symbol_idx_p); )
-
-                return RET_ERROR;
-            }
-        }
+        return_code = parseOperationValue(tree_text, symbol_idx_p, full_value_p);
     }
+
 
     while(tree_text[(*symbol_idx_p)] != '(' && tree_text[(*symbol_idx_p)] != ')'){
 
@@ -242,6 +203,90 @@ return_codes parseNodeValue(const char* const        tree_text,
     }
 
     ON_DEBUG_CONSOLE( printf("idx: %llu\n", *symbol_idx_p); )
+
+    return return_code;
+}
+
+return_codes parseVarValue(const char* const        tree_text   ,
+                           size_t* const            symbol_idx_p,
+                           node_full_value_t* const full_value_p){
+
+    assert(tree_text);
+    assert(symbol_idx_p);
+    assert(full_value_p);
+
+
+    full_value_p->node_type = VARIABLE_NODE;
+
+    if(tree_text[*symbol_idx_p] == 'x'){
+
+        full_value_p->value.var_code = X_VAR;
+
+    }else if(tree_text[*symbol_idx_p] == 'y'){
+
+        full_value_p->value.var_code = Y_VAR;
+
+    }else{
+
+        printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx variable with name: <%c>\n" DEFAULT_COLOR,
+        *symbol_idx_p, tree_text[*symbol_idx_p]);
+
+        return RET_ERROR;
+    }
+
+    return RET_CORRECT;
+}
+
+return_codes parseConstValue(const char* const        tree_text   ,
+                             size_t* const            symbol_idx_p,
+                             node_full_value_t* const full_value_p){
+
+    assert(tree_text);
+    assert(symbol_idx_p);
+    assert(full_value_p);
+
+
+    full_value_p->node_type = CONST_NODE;
+
+    if(sscanf(tree_text + *symbol_idx_p, "%lg", &(full_value_p->value.const_value)) != 1){
+
+        printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx incorrect const number\n" DEFAULT_COLOR,
+        *symbol_idx_p);
+
+        return RET_ERROR;
+    }
+
+    return RET_CORRECT;
+}
+
+return_codes parseOperationValue(const char* const        tree_text   ,
+                                 size_t* const            symbol_idx_p,
+                                 node_full_value_t* const full_value_p){
+
+    assert(tree_text);
+    assert(symbol_idx_p);
+    assert(full_value_p);
+
+
+    full_value_p->node_type = OPERATION_NODE;
+
+    for(size_t i = 0; i < sizeof(OPERATIONS); i++){
+
+        if(strncmp(tree_text + *symbol_idx_p, OPERATIONS[i].txt_form, strlen(OPERATIONS[i].txt_form)) == 0){
+
+            full_value_p->value.operation_code = (operation_codes) i;
+
+            ON_DEBUG_CONSOLE( printf("Detected operation %s\n", OPERATIONS[i].txt_form); )
+
+            break;
+
+        }else if(i == sizeof(OPERATIONS) - 1){
+
+            ON_DEBUG_CONSOLE( printf(RED_COLOR "ERROR: incorrect data in file of tree, in %llu idx incorrect name of operation\n" DEFAULT_COLOR, *symbol_idx_p); )
+
+            return RET_ERROR;
+        }
+    }
 
     return RET_CORRECT;
 }
