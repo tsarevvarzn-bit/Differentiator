@@ -1,4 +1,4 @@
-#include "..\Headers\LogPrinting.h"
+#include "..\Headers\TexPrinting.h"
 
 
 void printTreeInTexFormat(FILE* const out_file_p, const node_t* const root_p){
@@ -67,7 +67,9 @@ void printOpSubtreeInTexFormat(FILE* const out_file_p, const node_t* const root_
         fprintf(out_file_p, "{%s", l_l_parenthesis);
         printSubtreeInTexFormat(out_file_p, root_p->left_p);
         fprintf(out_file_p, "%s}", l_r_parenthesis);
+
         fprintf(out_file_p, "%s", OPERATIONS[op_code].tex_txt_form);
+
         fprintf(out_file_p, "{%s", r_l_parenthesis);
         printSubtreeInTexFormat(out_file_p, root_p->right_p);
         fprintf(out_file_p, "%s}", r_r_parenthesis);
@@ -108,7 +110,7 @@ void getParenthesis(const char* * const l_l_par_p,
 
     if(root_p->right_p != NULL && root_p->right_p->full_value.node_type == OPERATION_NODE){
 
-        right_priority = OPERATIONS[root_p->left_p->full_value.value.operation_code].math_priority;
+        right_priority = OPERATIONS[root_p->right_p->full_value.value.operation_code].math_priority;
     }
 
 
@@ -118,7 +120,7 @@ void getParenthesis(const char* * const l_l_par_p,
         *l_r_par_p = " ";
     }
 
-    if(OPERATIONS[op_code].math_priority >= right_priority && op_code != SUB){
+    if((OPERATIONS[op_code].math_priority >= right_priority) && (op_code != SUB)){
 
         *r_l_par_p = " ";
         *r_r_par_p = " ";

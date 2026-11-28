@@ -1,12 +1,16 @@
 #include "..\..\Headers\Tree\Visualization.h"
 
-void visualizeTree(const node_t* const root_p, const char * const name_of_file){
+void visualizeTree(const node_t* const root_p, FILE* const log_file_p, const char* const comment_str){
 
     assert(root_p);
-    assert(name_of_file);
 
     FILE* out_dot_file_p = fopen(NAME_OF_DOT_DATA_FILE, "w");
 
+    static int num_of_vis = 0;
+    num_of_vis++;
+
+    char name_of_svg_file[MAX_LEN_OF_NAME_OF_SVG_FILE] = "";
+    sprintf(name_of_svg_file, ".\\Dump\\Log\\%d.svg", num_of_vis);
 
     fprintf(out_dot_file_p,
 
@@ -36,24 +40,25 @@ void visualizeTree(const node_t* const root_p, const char * const name_of_file){
 
     fprintf(out_dot_file_p, "\n}");
 
-
     fclose(out_dot_file_p);
 
     char str_for_system_call[MAX_LEN_OF_STR_FOR_SYSTEM_CALL] = "";
 
-    sprintf(str_for_system_call, "dot.exe -Tsvg %s -o %s", NAME_OF_DOT_DATA_FILE, name_of_file);
+    sprintf(str_for_system_call, "dot.exe -Tsvg %s -o %s", NAME_OF_DOT_DATA_FILE, name_of_svg_file);
 
     int result = system(str_for_system_call);
 
     if(result == SYSTEM_CORRECT_RETURN){
 
-        printf(GREEN_COLOR "Correct visualization! Look for a visualization file named " YELLOW_COLOR "\"%s\"\n" DEFAULT_COLOR, name_of_file);
+        printf(GREEN_COLOR "Correct visualization! Look for a visualization file named " YELLOW_COLOR "\"%s\"\n" DEFAULT_COLOR, name_of_svg_file);
+
+        fprintf(log_file_p, "# %s\n![](.\\Log\\%d.svg)\n", comment_str, num_of_vis);
 
     }else{
 
         printf(RED_COLOR "ERROR! Incorrect return of\n"     \
-                   "int result = system(%s);\n"       \
-                   "result: %d" DEFAULT_COLOR, str_for_system_call, result);
+                         "int result = system(%s);\n"       \
+                         "result: %d" DEFAULT_COLOR, str_for_system_call, result);
     }
 }
 
@@ -141,15 +146,15 @@ const char* getNodeColor(const node_t* const root_p){
 
         case CONST_NODE:
 
-            return "#40b940";
+            return CONST_NODE_COLOR;
 
         case OPERATION_NODE:
 
-            return "yellow" ;
+            return OPERATION_NODE_COLOR;
 
         case VARIABLE_NODE:
 
-            return "#4fb6b6";
+            return VARIABLE_NODE_COLOR;
 
         default:
 

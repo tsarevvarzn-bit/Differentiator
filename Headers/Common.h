@@ -8,6 +8,9 @@
 
 #include "Colors.h"
 
+const char* const LOG_MD_FILE_NAME = ".\\Dump\\LogFile.md";
+const char* const TEX_FILE_NAME    = ".\\Dump\\TexFile.tex";
+
 enum return_codes{
 
     RET_ERROR,

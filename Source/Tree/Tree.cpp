@@ -101,22 +101,12 @@ return_codes createSheet(node_t* const parent_p, branch_codes branch_code, node_
 
 return_codes deleteNode(node_t* const node_p){
 
-    if(node_p == NULL){
-
-        printf("ERROR BLYA");
-        printNodeType(stdout, node_p->full_value);
-        printValueOfNode(stdout, node_p->full_value);
-    }
-
-
     assert(node_p);
 
     if(node_p->left_p != NULL || node_p->right_p != NULL){
 
         printf(RED_COLOR "ERROR: node for delete: %p have branches: left: %p, right: %p, delete them first!\n" DEFAULT_COLOR,
         node_p, node_p->left_p, node_p->right_p);
-
-
 
         return RET_ERROR;
     }
@@ -172,22 +162,6 @@ void deleteSubTree(node_t* const parent_p, branch_codes branch_code){
     }
 
     deleteTree((*root_of_subtree_p_p));
-//     if((*root_of_subtree_p_p)->left_p == NULL && (*root_of_subtree_p_p)->right_p == NULL){
-//
-//         deleteNode((*root_of_subtree_p_p));
-//
-//     }else{
-//
-//         if((*root_of_subtree_p_p)->left_p != NULL){
-//
-//             deleteTree((*root_of_subtree_p_p)->left_p );
-//         }
-//
-//         if((*root_of_subtree_p_p)->right_p != NULL){
-//
-//             deleteTree((*root_of_subtree_p_p)->right_p);
-//         }
-//     }
 
     (*root_of_subtree_p_p) = NULL;
 }

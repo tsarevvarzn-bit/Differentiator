@@ -99,7 +99,7 @@ double calculateConstSubtree(const node_t* const func_root_p){
 
             if(!isnan(value_of_left_subtree)){
 
-                value_of_tree = (OPERATIONS[func_root_p->full_value.value.operation_code].calc_func_p)(value_of_left_subtree, NULL);
+                value_of_tree = (OPERATIONS[func_root_p->full_value.value.operation_code].calc_func_p)(value_of_left_subtree, NAN);
             }
 
         }else{
@@ -154,19 +154,16 @@ bool tryDeleteNeutralNode(node_t* root_p){
         switch(root_p->full_value.value.operation_code){
 
             case ADD:   return optimizeAddSub(root_p);
-
             case SUB:   return optimizeAddSub(root_p);
-
             case MUL:   return optimizeMul(root_p);
-
             case DIV:   return optimizeDiv(root_p);
 
             case SIN:   return false;
-
             case COS:   return false;
+            case TG :   return false;
+            case CTG:   return false;
 
             case POW:   return optimizePow(root_p);
-
             case LN:    return false;
 
             default:

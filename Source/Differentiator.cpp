@@ -39,19 +39,16 @@ node_t* differentiateSubtree(const node_t* const func_root_p){
         switch(func_root_p->full_value.value.operation_code){
 
             case ADD:   return _ADD(_DL, _DR);
-
             case SUB:   return _SUB(_DL, _DR);
-
             case MUL:   return _ADD(_MUL(_CL, _DR), _MUL(_DL, _CR));
-
             case DIV:   return _DIV(_SUB(_MUL(_DL, _CR), _MUL(_CL, _DR)), _MUL(_CR, _CR));
 
             case SIN:   return _MUL(_COS(_CL), _DL);
-
             case COS:   return _MUL(_SUB(_NUM(0), _SIN(_CL)), _DL);
+            case TG :   return _MUL(_DIV(_NUM(1),  _POW(_COS(_CL), _NUM(2))), _DL);
+            case CTG:   return _MUL(_DIV(_NUM(-1), _POW(_SIN(_CL), _NUM(2))), _DL);
 
             case POW:   return diffPow(func_root_p);
-
             case LN:    return _MUL(_POW(_CL, _NUM(-1)), _DL);
 
             default:
